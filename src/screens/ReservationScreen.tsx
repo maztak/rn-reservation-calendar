@@ -4,8 +4,9 @@ import { Text, View } from 'react-native';
 import { common } from '../styles/common.style';
 import { gql, useQuery } from '@apollo/client';
 import { Picker } from '@react-native-picker/picker';
+import ReservationCalendar from '../components/ReservationCalendar';
 
-const CHAPTERS_QUERY = gql`
+const SHOP_QUERY = gql`
   query ShopQuery {
     shops {
       name # 店舗名
@@ -19,8 +20,8 @@ const CHAPTERS_QUERY = gql`
 `
 
 function ReservationScreen() {
-  const { data, loading } = useQuery(CHAPTERS_QUERY);
-  const [selectedShop, setSelectedShop] = useState();
+  const { data, loading, error } = useQuery(SHOP_QUERY);
+  const [selectedShopId, setSelectedShopId] = useState<number>();
   console.log('data: ', data);
 
   return (
@@ -28,16 +29,17 @@ function ReservationScreen() {
       <Text style={common.heading5}>店舗選択</Text>
       <Picker
         mode='dropdown'
-        selectedValue={selectedShop}
+        selectedValue={selectedShopId}
         style={styles.picker}
         onValueChange={(itemValue, itemIndex) =>
-          setSelectedShop(itemValue)
+          setSelectedShopId(itemValue)
         }>
         {data?.shops?.map((shop, index) => {
-          return <Picker.Item key={index} label={shop.name} value={index} />;
+          return <Picker.Item key={index} label={shop.name} value={index+1} />;
         })}
       </Picker>
       <Text style={common.heading5}>日付選択</Text>
+      <ReservationCalendar shopId={selectedShopId} />
     </View>
   );
 }
