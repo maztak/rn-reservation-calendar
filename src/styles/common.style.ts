@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const common = StyleSheet.create({
   container: {
-    padding: '20px',
+    padding: 20,
     height: '100%',
     backgroundColor: '#fff',
   },
